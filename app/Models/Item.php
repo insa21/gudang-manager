@@ -17,12 +17,12 @@ class Item extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function stockIn()
+    public function stockIns()
     {
         return $this->hasMany(StockIn::class);
     }
 
-    public function stockOut()
+    public function stockOuts()
     {
         return $this->hasMany(StockOut::class);
     }

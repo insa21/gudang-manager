@@ -12,7 +12,7 @@ class Supplier extends Model
 
     protected $fillable = ['name', 'contact'];
 
-    public function stockIn()
+    public function stockIns()
     {
         return $this->hasMany(StockIn::class);
     }

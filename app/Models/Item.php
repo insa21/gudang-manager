@@ -10,31 +10,20 @@ class Item extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'sku', 'description', 'quantity', 'unit', 'photo'];
+    protected $fillable = ['name', 'sku', 'category_id', 'stock', 'image_path'];
 
-    /**
-     * Relasi ke tabel item_transactions.
-     * Satu barang bisa memiliki banyak transaksi.
-     */
-    public function supplier()
+    public function category()
     {
-        return $this->belongsTo(Supplier::class);
+        return $this->belongsTo(Category::class);
     }
 
-    public function itemInTransactions()
+    public function stockIn()
     {
-        return $this->hasMany(ItemInTransaction::class);
+        return $this->hasMany(StockIn::class);
     }
 
-    public function itemOutTransactions()
+    public function stockOut()
     {
-        return $this->hasMany(ItemOutTransaction::class);
-    }
-
-    public function calculateStock(): int
-    {
-        $stockIn = $this->itemInTransactions()->sum('quantity');
-        $stockOut = $this->itemOutTransactions()->sum('quantity');
-        return $stockIn - $stockOut;
+        return $this->hasMany(StockOut::class);
     }
 }

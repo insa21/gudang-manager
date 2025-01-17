@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('item_transactions', function (Blueprint $table) {
+        Schema::create('stock_in', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('item_id')->constrained('items')->cascadeOnDelete();
-            $table->enum('transaction_type', ['in', 'out']);
+            $table->foreignId('item_id')->constrained('items')->onDelete('cascade');
+            $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->onDelete('set null');
             $table->integer('quantity');
             $table->date('transaction_date');
-            $table->text('description')->nullable();
-            // $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('item_transactions');
+        Schema::dropIfExists('stock_ins');
     }
 };

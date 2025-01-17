@@ -9,18 +9,17 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_barang')->unique();
             $table->string('name');
-            $table->text('description')->nullable();
+            $table->string('sku')->unique();
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->integer('stock')->default(0);
-            $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->cascadeOnDelete();
-            $table->string('photo_path')->nullable(); // Untuk menyimpan path foto barang
-            $table->softDeletes(); // Mengaktifkan fitur soft delete
+            $table->string('image_path')->nullable();
             $table->timestamps();
+            $table->softDeletes(); // For Filament compatibility
         });
     }
 

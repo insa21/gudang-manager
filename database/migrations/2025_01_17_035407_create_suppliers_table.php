@@ -9,15 +9,14 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('item_out_transactions', function (Blueprint $table) {
+        Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('item_id')->constrained('items')->cascadeOnDelete();
-            $table->integer('quantity');
-            $table->date('transaction_date');
-            $table->text('description')->nullable();
+            $table->string('name');
+            $table->string('contact')->nullable();
             $table->timestamps();
+            $table->softDeletes(); // For Filament compatibility
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('item_out_transactions');
+        Schema::dropIfExists('suppliers');
     }
 };

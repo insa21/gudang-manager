@@ -9,15 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('item_in_transactions', function (Blueprint $table) {
+        Schema::create('stock_out', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('item_id')->constrained('items')->cascadeOnDelete();
+            $table->foreignId('item_id')->constrained('items')->onDelete('cascade');
             $table->integer('quantity');
             $table->date('transaction_date');
-            $table->text('description')->nullable();
             $table->timestamps();
+            $table->softDeletes(); // For Filament compatibility
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('item_in_transactions');
+        Schema::dropIfExists('stock_outs');
     }
 };

@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Supplier extends Model
+class StockOut extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'contact'];
+    protected $fillable = ['item_id', 'quantity', 'transaction_date'];
 
-    public function stockIn()
+    public function item()
     {
-        return $this->hasMany(StockIn::class);
+        return $this->belongsTo(Item::class);
     }
 }

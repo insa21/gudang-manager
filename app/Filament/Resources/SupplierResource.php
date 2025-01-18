@@ -3,15 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SupplierResource\Pages;
-use App\Filament\Resources\SupplierResource\RelationManagers;
 use App\Models\Supplier;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SupplierResource extends Resource
 {
@@ -19,60 +16,84 @@ class SupplierResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    /**
+     * Define form schema
+     */
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('contact')
-                    ->maxLength(255)
-                    ->default(null),
-            ]);
+        return $form->schema([
+            Forms\Components\TextInput::make('name')
+                ->required()
+                ->maxLength(255)
+                ->label('Nama'),
+
+            Forms\Components\TextInput::make('contact')
+                ->maxLength(255)
+                ->default(null)
+                ->label('Kontak'),
+
+            Forms\Components\Textarea::make('address')
+                ->label('Alamat')
+                ->maxLength(1000),
+        ]);
     }
 
+    /**
+     * Define table schema
+     */
     public static function table(Table $table): Table
     {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('contact')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
+        return $table->columns([
+            Tables\Columns\TextColumn::make('name')
+                ->label('Nama')
+                ->searchable(),
+
+            Tables\Columns\TextColumn::make('contact')
+                ->label('Kontak')
+                ->searchable(),
+
+            Tables\Columns\TextColumn::make('address')
+                ->label('Alamat')
+                ->limit(50),
+
+            Tables\Columns\TextColumn::make('created_at')
+                ->label('Dibuat Pada')
+                ->dateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+
+            Tables\Columns\TextColumn::make('updated_at')
+                ->label('Diperbarui Pada')
+                ->dateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+        ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\TrashedFilter::make(), // Filter untuk data yang dihapus secara soft delete
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\RestoreAction::make(), // Opsi untuk mengembalikan data yang dihapus
+                Tables\Actions\ForceDeleteAction::make(), // Opsi untuk menghapus data secara permanen
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\RestoreBulkAction::make(), // Bulk action untuk restore
+                Tables\Actions\ForceDeleteBulkAction::make(), // Bulk action untuk force delete
             ]);
     }
 
+    /**
+     * Define relations
+     */
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
+    /**
+     * Define pages for this resource
+     */
     public static function getPages(): array
     {
         return [

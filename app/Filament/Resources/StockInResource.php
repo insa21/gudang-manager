@@ -2,21 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
 use App\Models\Item;
-use Filament\Tables;
 use App\Models\StockIn;
+use Filament\Forms;
+use Filament\Tables;
+use Filament\Resources\Resource;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\StockInResource\Pages;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\StockInResource\RelationManagers;
 
 class StockInResource extends Resource
 {
@@ -27,19 +26,22 @@ class StockInResource extends Resource
     {
         return $form->schema([
             Select::make('item_id')
-                ->label('Item')
+                ->label('Barang')
                 ->options(Item::all()->pluck('name', 'id'))
                 ->required(),
+
             Select::make('supplier_id')
                 ->label('Supplier')
                 ->relationship('supplier', 'name')
                 ->required(),
+
             TextInput::make('quantity')
-                ->label('Quantity')
+                ->label('Jumlah')
                 ->numeric()
                 ->required(),
+
             DatePicker::make('transaction_date')
-                ->label('Transaction Date')
+                ->label('Tanggal Transaksi')
                 ->default(now())
                 ->required(),
         ]);
@@ -47,35 +49,52 @@ class StockInResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table->columns([
-            TextColumn::make('item.name')->label('Item'),
-            TextColumn::make('supplier.name')->label('Supplier'),
-            TextColumn::make('quantity')->label('Quantity'),
-            TextColumn::make('transaction_date')->label('Transaction Date'),
-        ])
+        return $table
+            ->columns([
+                TextColumn::make('item.name')
+                    ->label('Barang')
+                    ->sortable()
+                    ->searchable(),
+
+                TextColumn::make('supplier.name')
+                    ->label('Supplier')
+                    ->sortable()
+                    ->searchable(),
+
+                TextColumn::make('quantity')
+                    ->label('Jumlah')
+                    ->sortable(),
+
+                TextColumn::make('transaction_date')
+                    ->label('Tanggal Transaksi')
+                    ->sortable(),
+
+                TextColumn::make('deleted_at')
+                    ->label('Tanggal Dihapus')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(), 
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     protected static function mutateFormDataBeforeCreate(array $data): array
     {
-        // Update the stock in the Item model when StockIn is created
         $item = Item::find($data['item_id']);
         $item->increment('stock', $data['quantity']);
 
@@ -84,9 +103,19 @@ class StockInResource extends Resource
 
     protected static function mutateFormDataBeforeDelete(Builder $record): void
     {
-        // Decrement the stock when StockIn is deleted
         $item = Item::find($record->item_id);
-        $item->decrement('stock', $record->quantity);
+        $item?->decrement('stock', $record->quantity);
+    }
+
+    protected static function mutateFormDataBeforeRestore(Builder $record): void
+    {
+        $item = Item::find($record->item_id);
+        $item?->increment('stock', $record->quantity);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->withoutGlobalScope(SoftDeletingScope::class);
     }
 
     public static function getPages(): array

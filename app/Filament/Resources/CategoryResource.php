@@ -3,63 +3,82 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CategoryResource\Pages;
-use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Models\Category;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
     protected static ?string $navigationIcon = 'heroicon-o-folder';
 
-    public static function form(Form $form): Form
+    /**
+     * Definisikan form untuk resource kategori
+     */
+    public static function form(Forms\Form $form): Forms\Form
     {
         return $form->schema([
             Forms\Components\TextInput::make('name')
+                ->label('Nama Kategori')
                 ->required()
                 ->maxLength(255),
+
             Forms\Components\Textarea::make('description')
-                ->maxLength(1000), // Opsional, batasi panjang teks
+                ->label('Deskripsi')
+                ->maxLength(1000), // Opsional: Batasi panjang deskripsi
         ]);
     }
 
-    public static function table(Table $table): Table
+    /**
+     * Definisikan tampilan tabel untuk resource kategori
+     */
+    public static function table(Tables\Table $table): Tables\Table
     {
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nama Kategori')
                     ->sortable()
                     ->searchable(),
+
                 Tables\Columns\TextColumn::make('description')
-                    ->limit(50), // Tampilkan maksimal 50 karakter
+                    ->label('Deskripsi')
+                    ->limit(50), // Tampilkan hingga 50 karakter
+
+                Tables\Columns\TextColumn::make('deleted_at')
+                    ->label('Dihapus Pada')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true), // Disembunyikan secara default
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(), // Tambahkan filter soft deletes
+                Tables\Filters\TrashedFilter::make() // Filter soft delete
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\RestoreAction::make(), // Aksi restore
+                Tables\Actions\ForceDeleteAction::make(), // Aksi force delete
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
-                Tables\Actions\RestoreBulkAction::make(), // Tambahkan opsi restore
-                Tables\Actions\ForceDeleteBulkAction::make(), // Tambahkan opsi force delete
+                Tables\Actions\RestoreBulkAction::make(), // Aksi restore bulk
+                Tables\Actions\ForceDeleteBulkAction::make(), // Aksi force delete bulk
             ]);
     }
 
+    /**
+     * Definisikan relasi untuk resource kategori
+     */
     public static function getRelations(): array
     {
-        return [
-            // RelationManagers\ItemsRelationManager::class,
-        ];
+        return [];
     }
 
+    /**
+     * Definisikan halaman untuk resource kategori
+     */
     public static function getPages(): array
     {
         return [

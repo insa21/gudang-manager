@@ -13,10 +13,8 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\StockOutResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\StockOutResource\RelationManagers;
+use Filament\Notifications\Notification;
 
 class StockOutResource extends Resource
 {
@@ -31,11 +29,25 @@ class StockOutResource extends Resource
                 ->relationship('item', 'name')
                 ->required(),
             TextInput::make('quantity')
-                ->label('Quantity')
+                ->label('Jumlah')
                 ->numeric()
-                ->required(),
+                ->required()
+                ->afterStateUpdated(function (callable $set, $state, $get) {
+                    $item = Item::find($get('item_id'));
+                    if ($item && $state > $item->stock) {
+                        $set('quantity', $item->stock); // Set jumlah sesuai stok yang tersedia
+                        // Kirim pemberitahuan
+                        Notification::make()
+                            ->title('Stok Tidak Cukup')
+                            ->body('Jumlah yang Anda masukkan melebihi stok yang tersedia (' . $item->stock . '). Jumlah telah disesuaikan.')
+                            ->warning()
+                            ->send();
+                        return "Jumlah tidak boleh melebihi stok yang tersedia: {$item->stock}.";
+                    }
+                    return null;
+                }),
             DatePicker::make('transaction_date')
-                ->label('Transaction Date')
+                ->label('Tanggal Transaksi')
                 ->default(now())
                 ->required(),
         ]);
@@ -46,11 +58,11 @@ class StockOutResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('item.name')->label('Item'),
-                TextColumn::make('quantity')->label('Quantity'),
-                TextColumn::make('transaction_date')->label('Transaction Date'),
+                TextColumn::make('quantity')->label('Jumlah'),
+                TextColumn::make('transaction_date')->label('Tanggal Transaksi'),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(), 
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -69,23 +81,18 @@ class StockOutResource extends Resource
         ];
     }
 
-    protected static function mutateFormDataBeforeCreate(array $data): array
+
+    protected static function mutateFormDataBeforeDelete($record): void
     {
-        // Decrement the stock in the Item model when StockOut is created
-        $item = Item::find($data['item_id']);
-        if ($item->stock < $data['quantity']) {
-            throw new \Exception('Stock is insufficient for this operation.');
+        // Mendapatkan data item yang dihapus
+        $item = Item::find($record->item_id);
+
+        // Validasi jika item tidak ditemukan
+        if (!$item) {
+            throw new \Exception('Item tidak ditemukan.');
         }
 
-        $item->decrement('stock', $data['quantity']);
-
-        return $data;
-    }
-
-    protected static function mutateFormDataBeforeDelete(Builder $record): void
-    {
-        // Increment the stock when StockOut is deleted
-        $item = Item::find($record->item_id);
+        // Tambah stok saat StockOut dihapus
         $item->increment('stock', $record->quantity);
     }
 

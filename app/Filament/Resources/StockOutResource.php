@@ -20,6 +20,11 @@ class StockOutResource extends Resource
 {
     protected static ?string $model = StockOut::class;
     protected static ?string $navigationIcon = 'heroicon-o-chevron-double-up';
+    protected static ?string $navigationLabel = 'Keluar';
+    protected static ?string $slug = 'transaksi-keluar';
+    protected static ?string $navigationGroup = 'Transaksi';
+    protected static ?string $modelLabel = 'Keluar';
+
 
     public static function form(Form $form): Form
     {

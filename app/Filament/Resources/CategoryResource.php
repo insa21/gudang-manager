@@ -12,6 +12,11 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
     protected static ?string $navigationIcon = 'heroicon-o-folder';
+    protected static ?string $navigationLabel = 'Kategori';
+    protected static ?string $slug = 'item-kategori';
+    protected static ?string $navigationGroup = 'Item';
+    protected static ?string $modelLabel = 'Kategori';
+
 
     /**
      * Definisikan form untuk resource kategori

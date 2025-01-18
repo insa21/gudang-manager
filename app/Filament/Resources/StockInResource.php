@@ -21,6 +21,10 @@ class StockInResource extends Resource
 {
     protected static ?string $model = StockIn::class;
     protected static ?string $navigationIcon = 'heroicon-o-chevron-double-down';
+    protected static ?string $navigationLabel = 'Masuk';
+    protected static ?string $slug = 'transaksi-masuk';
+    protected static ?string $navigationGroup = 'Transaksi';
+    protected static ?string $modelLabel = 'Masuk';
 
     public static function form(Form $form): Form
     {

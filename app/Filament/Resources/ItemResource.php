@@ -15,6 +15,10 @@ class ItemResource extends Resource
 {
     protected static ?string $model = Item::class;
     protected static ?string $navigationIcon = 'heroicon-o-archive-box';
+    protected static ?string $navigationLabel = 'Barang';
+    protected static ?string $slug = 'item-barang';
+    protected static ?string $navigationGroup = 'Item';
+    protected static ?string $modelLabel = 'Barang';
 
     public static function form(Forms\Form $form): Forms\Form
     {
@@ -34,6 +38,13 @@ class ItemResource extends Resource
                     ->label('Kategori')
                     ->relationship('category', 'name')
                     ->required(),
+
+                Forms\Components\TextInput::make('price')
+                    ->label('Harga')
+                    ->required()
+                    ->numeric()
+                    ->prefix('Rp')
+                    ->minValue(0),
 
                 Forms\Components\FileUpload::make('image_path')
                     ->label('Gambar')
@@ -61,6 +72,11 @@ class ItemResource extends Resource
 
                 TextColumn::make('category.name')
                     ->label('Kategori')
+                    ->sortable(),
+
+                TextColumn::make('price')
+                    ->label('Harga')
+                    ->money('IDR', true)
                     ->sortable(),
 
                 TextColumn::make('stock')

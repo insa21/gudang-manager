@@ -8,6 +8,7 @@ use Filament\Widgets;
 use Filament\PanelProvider;
 use Filament\Navigation\MenuItem;
 use Filament\Support\Colors\Color;
+use Filament\Navigation\NavigationGroup;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -28,6 +29,10 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            // ->registration()
+            ->passwordReset()
+            ->emailVerification()
+            ->profile()
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -41,9 +46,17 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
             ])
-            ->userMenuItems([
-                'profile' => MenuItem::make()->label('Edit profile'),
+
+            ->navigationGroups([
+                'Item',
+                'Transaksi',
+                'Lainnya'
             ])
+
+
+            // ->userMenuItems([
+            //     'profile' => MenuItem::make()->label('Edit profile'),
+            // ])
             ->sidebarCollapsibleOnDesktop()
             ->spa()
             ->middleware([

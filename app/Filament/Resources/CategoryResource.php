@@ -38,16 +38,13 @@ class CategoryResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
                     ->limit(50), // Tampilkan maksimal 50 karakter
-                Tables\Columns\TextColumn::make('deleted_at')
-                    ->label('Deleted At')
-                    ->dateTime()
-                // ->hidden(fn() => !auth()->user()->can('view_deleted_records')), 
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(), // Tambahkan filter soft deletes
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

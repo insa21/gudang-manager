@@ -28,7 +28,7 @@ class StockInResource extends Resource
         return $form->schema([
             Select::make('item_id')
                 ->label('Item')
-                ->relationship('item', 'name')
+                ->options(Item::all()->pluck('name', 'id'))
                 ->required(),
             Select::make('supplier_id')
                 ->label('Supplier')
@@ -54,7 +54,7 @@ class StockInResource extends Resource
             TextColumn::make('transaction_date')->label('Transaction Date'),
         ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(), 
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

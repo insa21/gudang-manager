@@ -26,4 +26,12 @@ class Item extends Model
     {
         return $this->hasMany(StockOut::class);
     }
+
+    public function getStockAttribute()
+    {
+        $stockIn = $this->stockIns()->sum('quantity'); // Total barang masuk
+        $stockOut = $this->stockOuts()->sum('quantity'); // Total barang keluar
+
+        return $stockIn - $stockOut; // Hitung stok saat ini
+    }
 }

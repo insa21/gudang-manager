@@ -36,10 +36,10 @@ class ItemResource extends Resource
                 Select::make('category_id')
                     ->relationship('category', 'name')
                     ->required(),
-                Forms\Components\TextInput::make('stock')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
+                // Forms\Components\TextInput::make('stock')
+                //     ->required()
+                //     ->numeric()
+                //     ->default(0),
                 Forms\Components\FileUpload::make('image_path')
                     ->image()
                     ->nullable(),
@@ -50,6 +50,8 @@ class ItemResource extends Resource
     {
         return $table
             ->columns([
+                ImageColumn::make('image_path')
+                    ->label('Image'),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('sku')
@@ -60,8 +62,6 @@ class ItemResource extends Resource
                 TextColumn::make('stock')
                     ->numeric()
                     ->sortable(),
-                ImageColumn::make('image_path')
-                    ->label('Image'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -76,14 +76,17 @@ class ItemResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(), 
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(), // Tambahkan opsi restore
+                    Tables\Actions\ForceDeleteBulkAction::make(), // Tambahkan opsi force delete
                 ]),
             ]);
     }

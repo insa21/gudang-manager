@@ -50,7 +50,7 @@ class StockOutResource extends Resource
                 TextColumn::make('transaction_date')->label('Transaction Date'),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(), 
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

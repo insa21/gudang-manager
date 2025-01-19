@@ -15,25 +15,37 @@ GudangManager adalah aplikasi manajemen gudang berbasis web yang membantu Anda m
 
 ### Dashboard Gudang
 
-![GudangManager Dashboard](.\resources\images\dashboard.png)
+![GudangManager Dashboard](./resources/images/dashboard.png)
 
 **Penjelasan**: Tampilan dashboard yang menunjukkan statistik barang masuk dan keluar, serta grafik interaktif untuk analisis tren dan distribusi pemasok.
 
+### Transaksi Kategori
+
+![Transaksi Kategori](./resources/images/kategori.png)
+
+**Penjelasan**: Halaman untuk mengelola kategori barang yang ada di gudang, memudahkan pengelompokkan barang berdasarkan jenis dan kategori.
+
 ### Manajemen Barang
 
-![Manajemen Barang](./images/barang_screenshot.png)
+![Manajemen Barang](./resources/images/barang.png)
 
 **Penjelasan**: Halaman untuk mengelola data barang, memudahkan penambahan, pengeditan, dan penghapusan barang dari gudang.
 
-### Transaksi Barang
+### Transaksi Barang Masuk
 
-![Transaksi Barang](./images/transaksi_screenshot.png)
+![Transaksi Barang Masuk](./resources/images/masuk.png)
 
-**Penjelasan**: Antarmuka untuk mencatat transaksi barang masuk dan keluar, memantau stok barang secara real-time.
+**Penjelasan**: Antarmuka untuk mencatat transaksi barang masuk dan memantau stok barang secara real-time.
+
+### Transaksi Barang Keluar
+
+![Transaksi Barang Keluar](./resources/images/keluar.png)
+
+**Penjelasan**: Antarmuka untuk mencatat transaksi barang keluar dan memastikan stok barang terkelola dengan baik.
 
 ### Manajemen Pemasok
 
-![Manajemen Pemasok](./images/pemasok_screenshot.png)
+![Manajemen Pemasok](./resources/images/pemasok.png)
 
 **Penjelasan**: Tampilan untuk mengelola informasi pemasok yang terhubung dengan gudang Anda, termasuk alamat dan detail kontak.
 

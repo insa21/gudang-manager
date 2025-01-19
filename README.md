@@ -95,14 +95,3 @@ Aplikasi ini dilisensikan di bawah [MIT License](./LICENSE).
 ---
 
 **Dibuat dengan ❤️ oleh Indra Saepudin ([GitHub](https://github.com/insa21))**
-
-```
-
-### Penjelasan Struktur:
-1. **Screenshot**: Pastikan screenshot aplikasi diletakkan di folder `./images` atau sesuai lokasi gambar yang kamu miliki.
-2. **Fitur**: Terdapat penjelasan tentang fitur utama dari aplikasi, dengan masing-masing fitur disertai gambar.
-3. **Instalasi**: Panduan instalasi dengan langkah-langkah jelas, termasuk perintah terminal.
-4. **Teknologi**: Informasi mengenai teknologi yang digunakan dalam pengembangan aplikasi.
-
-Sesuaikan lokasi file gambar sesuai dengan struktur folder proyek kamu agar gambar dapat ditampilkan dengan benar.
-```

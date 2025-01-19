@@ -9,6 +9,9 @@ class SupplierTrends extends PieChartWidget
 {
     protected static ?string $heading = 'Distribusi Pemasok';
 
+    // Atur lebar maksimum widget
+    protected static ?string $maxWidth = 'sm';
+
     protected function getData(): array
     {
         $data = Supplier::query()

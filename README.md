@@ -15,7 +15,7 @@ GudangManager adalah aplikasi manajemen gudang berbasis web yang membantu Anda m
 
 ### Dashboard Gudang
 
-![GudangManager Dashboard](./images/dashboard_screenshot.png)
+![GudangManager Dashboard](.\resources\images\dashboard.png)
 
 **Penjelasan**: Tampilan dashboard yang menunjukkan statistik barang masuk dan keluar, serta grafik interaktif untuk analisis tren dan distribusi pemasok.
 
@@ -86,7 +86,7 @@ Ikuti langkah-langkah berikut untuk menjalankan GudangManager di lingkungan loka
 -   **Frontend**: Filament
 -   **Grafik**: Laravel Trend
 -   **Database**: MySQL
--   **Server Lokal**: Laragon
+-   **Server Lokal**: Laragon dan Xampp
 
 ## 📝 Lisensi
 

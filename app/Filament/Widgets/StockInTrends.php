@@ -15,6 +15,7 @@ class StockInTrends extends LineChartWidget
     {
         // Ambil data trend berdasarkan transaction_date
         $trend = Trend::model(StockIn::class)
+            ->dateColumn('transaction_date')
             ->between(
                 start: now()->subDays(30), // 30 hari terakhir
                 end: now()

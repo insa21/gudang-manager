@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Filament\Widgets;
 
 use Flowframe\Trend\Trend;
@@ -12,8 +13,9 @@ class StockOutTrends extends LineChartWidget
 
     protected function getData(): array
     {
-        // Mengambil data tren barang keluar per hari selama 30 hari terakhir
+        // Mengambil data tren barang keluar per hari berdasarkan transaction_date selama 30 hari terakhir
         $trend = Trend::model(StockOut::class)
+            ->dateColumn('transaction_date') // Gunakan kolom transaction_date
             ->between(
                 start: now()->subDays(30),
                 end: now(),

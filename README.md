@@ -106,4 +106,4 @@ Aplikasi ini dilisensikan di bawah [MIT License](./LICENSE).
 
 ---
 
-**Dibuat dengan ❤️ oleh Indra Saepudin ([GitHub](https://github.com/insa21))**
+<!-- **Dibuat dengan ❤️ oleh Indra Saepudin ([GitHub](https://github.com/insa21))** -->

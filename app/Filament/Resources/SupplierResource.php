@@ -78,6 +78,7 @@ class SupplierResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(), // Tambahkan aksi delete
                 Tables\Actions\RestoreAction::make(), // Opsi untuk mengembalikan data yang dihapus
                 Tables\Actions\ForceDeleteAction::make(), // Opsi untuk menghapus data secara permanen
             ])
